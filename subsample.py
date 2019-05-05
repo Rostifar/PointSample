@@ -45,34 +45,17 @@ def voxel_filter(data, x_filter, y_filter, z_filter):
     filt.set_leaf_size(x_filter, y_filter, z_filter)
     return filt.filter().to_array()
     
-        
 
-def segment_lowest_points(data, x_len, y_len):
-    """
-    Inputs: a numpy array of 3D points normalized between [0, 1],
-            and integers x_len, y_len.
-    Process: 
-            - divides [0, 1] into x_len and y_len partitions.
-            - for each point in data, finds the x partition and the
-              y partition such that x_part - 1 <= point.x <= x_part
-                                    y_part - 1 <= point.y <= y_part.
-              Then, checks whether point.z is lower the current point.
-              If it is, then point is considered the lowest point in that 
-              x-y partition.
-    Outputs: a numpy array of the lower x_len * y_len points in data.
-
-    """
-
+def voxelize(data, x_len, y_len, z_len):
     x_iter = 1 / x_len
     y_iter = 1 / y_len
-    lowest_points = np.ones(shape=(x_len, y_len, 3))
+    a = np.ones(shape=(x_len, y_len, 3))
 
     for i in range(0, data.shape[0]):
         point = data[i, :]
         x = point[0]
         y = point[1]
         z = point[2]
-        
         square_x = int(x // x_iter)
         square_y = int(y // y_iter)
 
@@ -81,12 +64,13 @@ def segment_lowest_points(data, x_len, y_len):
         if square_y == y_len:
             square_y = y_len - 1
 
-        if lowest_points[square_x, square_y, 2] > z:
-            lowest_points[square_x, square_y, :] = point
+        if a[square_x, square_y, 2] > z:
+            a[square_x, square_y, :] = point
+
 
     for i in range(0, x_len):
         for j in range(0, y_len):
-            if lowest_points[i][j] == [1, 1, 1]:
+            if np.array_equal(a[i][j], [1, 1, 1]):
                 x_kernel = [i - 1, i + 1]
                 y_kernel = [j - 1, j + 1]
                 for l in range(0, 2):
@@ -97,11 +81,10 @@ def segment_lowest_points(data, x_len, y_len):
                 sigma = 0
                 for m in range(0, len(x_kernel)):
                     for n in range(0, len(y_kernel)):
-                        sigma += lowest_points[m][n][2]
-                lowest_points[i][j] = [((i + 1) * x_iter) / 2, ((j + 1) * x_iter) / 2, sigma / (len(x_kernel) + len(y_kernel))]
-    return lowest_points.reshape((x_len * y_len, 3))
+                        sigma += a[m][n][2]
+                a[i][j] = [((i + 1) * x_iter) / 2, ((j + 1) * x_iter) / 2, sigma / (len(x_kernel) + len(y_kernel))]
+    return a.reshape((x_len * y_len, 3))
 
-           
             
 def box_subsample(data, origin, length, width, height):
     """
