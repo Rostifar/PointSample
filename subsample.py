@@ -1,14 +1,10 @@
 import laspy
-import os 
-import glob
 import numpy as np
 import math
-import pptk
 import pcl
 
 from open3d import *
 from pyflann import *
-import random
 
 
 def visualize_points(data, start, end):
