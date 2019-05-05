@@ -14,7 +14,7 @@ lidar = laspy.file.File(las_file)
 model_size = lidar.X.shape[0]
 
 # Convert .las file to points
-data = laspy_obj_to_points(lidar, chunk_start=0, chunk_end=model_size, (0, 1))
+data = laspy_obj_to_points(lidar, chunk_start=0, chunk_end=model_size, norm_range=(0, 1))
 
 # Segment using segment_lowest_points
 new_data = segment_lowest_points(data, 450, 450)
