@@ -7,5 +7,5 @@
 ## Dependencies
 * [Laspy](https://pypi.org/project/laspy/)
 * [Python PCL](https://github.com/strawlab/python-pcl)
-* [Numpy] (http://www.open3d.org/)
-* [Pyflann] (https://github.com/primetang/pyflann)
+* [Numpy](http://www.open3d.org/)
+* [Pyflann](https://github.com/primetang/pyflann)
