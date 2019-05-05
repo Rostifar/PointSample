@@ -86,7 +86,7 @@ def segment_lowest_points(data, x_len, y_len):
 
     for i in range(0, x_len):
         for j in range(0, y_len):
-            if lowest_points[i][j] = [1, 1, 1]:
+            if lowest_points[i][j] == [1, 1, 1]:
                 x_kernel = [i - 1, i + 1]
                 y_kernel = [j - 1, j + 1]
                 for l in range(0, 2):
@@ -98,8 +98,7 @@ def segment_lowest_points(data, x_len, y_len):
                 for m in range(0, len(x_kernel)):
                     for n in range(0, len(y_kernel)):
                         sigma += lowest_points[m][n][2]
-                lowest_points[i][j] = 
-                [((i + 1) * x_iter) / 2, ((j + 1) * x_iter) / 2, sigma / (len(x_kernel) + len(y_kernel))]
+                lowest_points[i][j] = [((i + 1) * x_iter) / 2, ((j + 1) * x_iter) / 2, sigma / (len(x_kernel) + len(y_kernel))]
     return lowest_points.reshape((x_len * y_len, 3))
 
            
